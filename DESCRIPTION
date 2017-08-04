@@ -1,0 +1,12 @@
+Package: defaults
+Type: Package
+Title: Change the Default Arguments in R Functions
+Version: 0.1.0
+Author: Nick Golding
+Maintainer: Nick Golding <nick.golding.research@gmail.com>
+Description: A simple syntax to change the default values for function
+  arguments, whether they are in packages or defined locally.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.0.1
