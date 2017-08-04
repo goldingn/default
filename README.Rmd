@@ -1,0 +1,49 @@
+___
+output:
+  md_document:
+    variant: markdown_github
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, cache = FALSE, fig.height=4, fig.width=5)
+set.seed(1)
+```
+
+## defaults
+#### change the default arguments in R functions.
+
+Tired of always typing out the same old arguments to functions?  Use `defaults()` to set your favourite arguments as the defaults.
+
+##### boring old defaults
+
+```{r}
+hist(iris$Sepal.Width)
+```
+
+##### exciting new defaults
+
+```{r}
+library (defaults)
+defaults(hist.default) <- list(col = "deeppink", border = "white", breaks = 20, ylab = "", main = "")
+
+hist(iris$Sepal.Width)
+```
+
+##### you can still change the arguments
+
+```{r}
+hist(iris$Sepal.Width, col = "limegreen")
+```
+
+##### and restore the original defaults
+
+```{r}
+hist.default <- reset_defaults(hist.default)
+hist(iris$Sepal.Width)
+```
+
+##### you can install defaults from github
+
+```{r, eval = FALSE}
+devtools::install_github("goldingn/defaults")
+```
