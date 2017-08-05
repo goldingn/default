@@ -111,9 +111,15 @@ render_one_default <- function (index, args) {
 
   # handle missing and NULL values
   if (missing(value)) {
+
     value <- ""
     sep <- ""
+
   } else {
+
+    if (is.character(value))
+      value <- paste0('"', value, '"')
+
     sep <- " = "
   }
 
