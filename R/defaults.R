@@ -168,14 +168,10 @@ check_defaults <- function (fun, value) {
 
 }
 
-# put defaults into the arguments list
-update_defaults <- function (list, defaults) {
+update_defaults <- function (old_defaults, new_defaults) {
 
-  labels <- names(defaults)
+  old_defaults[names(new_defaults)] <- new_defaults
 
-  for (i in seq_along(defaults))
-    list[[labels[i]]] <- defaults[[i]]
-
-  list
+  as.pairlist(old_defaults)
 
 }
