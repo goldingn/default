@@ -19,8 +19,57 @@
 #'
 #' @examples
 #' # to do
-defaults <- function (fun)
-  formals(fun)
+defaults <- function (fun) {
+  args <- formals(fun)
+  render_defaults(args, fun)
+  invisible(args)
+}
+
+# print the current default arguments nicely
+render_defaults <- function (args, fun) {
+
+  each_default_text <- lapply(seq_along(args), render_default, args)
+
+  # if it has overwritten defaults, mark them with an asterisk
+  if (inherits(fun, "defaults_function")) {
+    old_args <- formals(attr(fun, "original_function"))
+    updated <- !mapply(identical, args, old_args)
+    each_default_text[updated] <- paste0(" * ", each_default_text[updated])
+    each_default_text[!updated] <- paste0("   ", each_default_text[!updated])
+    end_note <- "\n(* user defined default)\n"
+  } else {
+    each_default_text <- paste0("   ", each_default_text)
+    end_note <- ""
+  }
+
+  defaults_text <- paste(each_default_text, collapse = "\n")
+  print_string <- paste0("defaults:\n", defaults_text, "\n", end_note)
+  cat(print_string)
+
+}
+
+#' @importFrom utils capture.output
+render_default <- function (index, args) {
+  name <- names(args[index])
+  value <- args[[index]]
+
+  # handle missing and NULL values
+  if (missing(value)) {
+    value <- ""
+    sep <- ""
+  } else {
+    sep <- " = "
+  }
+
+  if (is.null(value))
+    value <- "NULL"
+
+  if (is.call(value))
+    value <- capture.output(print(value))
+
+  paste(name, value, sep = sep)
+
+}
 
 # (make this print nicely in the future, possibly with asterisks to denote the changed values)
 
@@ -119,6 +168,3 @@ set_args <- function (list, defaults) {
   list
 
 }
-
-
-
