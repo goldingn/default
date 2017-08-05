@@ -75,11 +75,10 @@ print.defaults_function <- function (x, ...) {
 
 }
 
-
 # print the current default arguments nicely
 render_defaults <- function (args, fun) {
 
-  each_default_text <- lapply(seq_along(args), render_default, args)
+  each_default_text <- lapply(seq_along(args), render_one_default, args)
 
   # if it has overwritten defaults, mark them with an asterisk
   if (inherits(fun, "defaults_function")) {
@@ -106,7 +105,7 @@ render_defaults <- function (args, fun) {
 }
 
 #' @importFrom utils capture.output
-render_default <- function (index, args) {
+render_one_default <- function (index, args) {
   name <- names(args[index])
   value <- args[[index]]
 
