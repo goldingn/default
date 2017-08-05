@@ -17,7 +17,7 @@ hist(iris$Sepal.Width)
 
 ``` r
 library (defaults)
-defaults(hist.default) <- list(col = "deeppink", border = "white", breaks = 20, ylab = "", main = "")
+defaults(hist.default) <- list(col = "deeppink", border = "white", ylab = "", main = "")
 
 hist(iris$Sepal.Width)
 ```
