@@ -25,6 +25,57 @@ defaults <- function (fun) {
   invisible(args)
 }
 
+#' @rdname defaults
+#' @export
+`defaults<-` <- function (fun, value) {
+
+  check_defaults(fun, value)
+
+  arguments <- update_defaults(formals(fun), value)
+
+  new_fun <- do.call(`function`,
+                     list(arguments,
+                          body(fun)),
+                     envir = environment(fun))
+
+  original(new_fun) <- reset_defaults(fun)
+
+  class(new_fun) <- c("defaults_function", class(new_fun))
+
+  new_fun
+
+}
+
+#' @rdname defaults
+#' @export
+reset_defaults <- function (fun) {
+
+  original_fun <- original(fun)
+
+  if (is.null(original_fun))
+    original_fun <- fun
+
+  original_fun
+
+}
+
+original <- function (fun)
+  attr(fun, "original_function")
+
+`original<-` <- function (fun, value)
+  `attr<-`(fun, "original_function", value)
+
+# print the function without the original function as an attribute
+#' @export
+print.defaults_function <- function (x, ...) {
+
+  original(x) <- NULL
+
+  print.function(x, ...)
+
+}
+
+
 # print the current default arguments nicely
 render_defaults <- function (args, fun) {
 
@@ -32,11 +83,17 @@ render_defaults <- function (args, fun) {
 
   # if it has overwritten defaults, mark them with an asterisk
   if (inherits(fun, "defaults_function")) {
-    old_args <- formals(attr(fun, "original_function"))
+
+    old_args <- formals(original(fun))
+
     updated <- !mapply(identical, args, old_args)
+
     each_default_text[updated] <- paste0(" * ", each_default_text[updated])
+
     each_default_text[!updated] <- paste0("   ", each_default_text[!updated])
+
     end_note <- "\n(* user defined default)\n"
+
   } else {
     each_default_text <- paste0("   ", each_default_text)
     end_note <- ""
@@ -69,52 +126,6 @@ render_default <- function (index, args) {
 
   paste(name, value, sep = sep)
 
-}
-
-# (make this print nicely in the future, possibly with asterisks to denote the changed values)
-
-#' @rdname defaults
-#' @export
-`defaults<-` <- function (fun, value) {
-
-  # check fun & value are what they are supposed to be
-  check_defaults(fun, value)
-
-  # update arguments
-  args <- set_args(formals(fun), value)
-
-  # rebuild the function
-  new_fun <- do.call(`function`,
-                     list(args,
-                          body(fun)),
-                     envir = environment(fun))
-
-  # add the original function as an attribute
-  original_fun <- attr(fun, "original_function")
-  if (is.null(original_fun))
-    original_fun <- fun
-  attr(new_fun, "original_function") <- original_fun
-
-  class(new_fun) <- c("defaults_function", class(new_fun))
-
-  new_fun
-
-}
-
-#' @rdname defaults
-#' @export
-reset_defaults <- function (fun) {
-  original_fun <- attr(fun, "original_function")
-  if (is.null(original_fun))
-    original_fun <- fun
-  original_fun
-}
-
-# print the function without the original function as an attribute
-#' @export
-print.defaults_function <- function (x, ...) {
-  attr(x, "original_function") <- NULL
-  print.function(x, ...)
 }
 
 check_defaults <- function (fun, value) {
@@ -158,7 +169,7 @@ check_defaults <- function (fun, value) {
 }
 
 # put defaults into the arguments list
-set_args <- function (list, defaults) {
+update_defaults <- function (list, defaults) {
 
   labels <- names(defaults)
 
