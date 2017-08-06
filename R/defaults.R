@@ -97,50 +97,37 @@ print.defaults_function <- function (x, ...) {
 # print the current default arguments nicely
 render_defaults <- function (args, fun) {
 
+  if (length(args) == 0) {
+    cat (  "function has no arguments")
+    return ()
+  }
+
   each_default_text <- lapply(seq_along(args), render_one_default, args)
 
   # if it has overwritten defaults, mark them with an asterisk
-  if (inherits(fun, "defaults_function")) {
+  if (inherits(fun, "defaults_function"))
+    updated <- !mapply(identical, args, formals(original(fun)))
+  else
+    updated <- FALSE
 
-    old_args <- formals(original(fun))
-
-    updated <- !mapply(identical, args, old_args)
-
-    each_default_text[updated] <- paste0(" * ", each_default_text[updated])
-
-    each_default_text[!updated] <- paste0("   ", each_default_text[!updated])
-
-    end_note <- "\n(* user defined default)\n"
-
-  } else {
-    each_default_text <- paste0("   ", each_default_text)
-    end_note <- ""
-  }
+  prepend <- ifelse(updated, "* - ", "  - ")
+  each_default_text <- paste0(prepend, each_default_text)
 
   defaults_text <- paste(each_default_text, collapse = "\n")
-  print_string <- paste0("defaults:\n", defaults_text, "\n", end_note)
-  cat(print_string)
+  cat(defaults_text, "\n")
 
 }
 
 #' @importFrom utils capture.output
 render_one_default <- function (index, args) {
+
   name <- names(args[index])
   value <- args[[index]]
 
-  # handle missing and NULL values
-  if (missing(value)) {
-
-    value <- ""
-    sep <- ""
-
-  } else {
-
-    if (is.character(value))
-      value <- paste0('"', value, '"')
-
-    sep <- " = "
-  }
+  if (missing(value))
+    value <- "[none]"
+  else if (is.character(value))
+    value <- paste0('"', value, '"')
 
   if (is.null(value))
     value <- "NULL"
@@ -148,7 +135,7 @@ render_one_default <- function (index, args) {
   if (is.call(value))
     value <- capture.output(print(value))
 
-  paste(name, value, sep = sep)
+  paste(name, value, sep = " = ")
 
 }
 
