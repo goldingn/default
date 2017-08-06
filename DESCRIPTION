@@ -9,5 +9,6 @@ Description: A simple syntax to change the default values for function
   arguments, whether they are in packages or defined locally.
 License: MIT + file LICENSE
 Encoding: UTF-8
+Suggests: testthat
 LazyData: true
 RoxygenNote: 6.0.1
