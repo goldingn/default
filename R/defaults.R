@@ -3,22 +3,41 @@
 #' @export
 #'
 #' @description \code{defaults()} lets you check, and change, a function's
-#'   default arguments, \code{reset_defaults()} returns the arguments to their
+#'   default arguments. \code{reset_defaults()} returns the arguments to their
 #'   original defaults.
 #'
 #' @param fun a function
 #' @param value a named list of new default arguments for that function
 #'
-#' @details If \code{fun} is in a package, a function of the same name will be
-#'   defined in the calling environment (probably your workspace). If \code{fun}
-#'   is defined locally, it will be overwritten by the version with the new
+#' @details If \code{fun} is a function from a package, a function of the same
+#'   name will be defined in the calling environment (e.g. your workspace).
+#'   If \code{fun} is defined locally, it will be overwritten by the version
+#'   with the new defaults.
+#'
+#'   \code{reset_defaults} \emph{returns} the reset function, rather than
+#'   modifying it in place, so you'll need to reassign it, as in the example.
+#'
+#' @return \code{default()} (without assignment) invisibly returns a pairlist of
+#'   the current values of the default arguments. It also prints the default
+#'   arguments, highlighting those that the user has changed from their original
 #'   defaults.
 #'
-#'   \code{reset_defaults} returns the reset function, rather than modifying it
-#'   in place, so you'll need to reassign it as in the example.
+#'   \code{reset_defaults()} returns the \code{fun}, but with the defaults reset
+#'   to their original values. If \code{fun} was a function from a package, the
+#'   same thing can be achieved by replacing the locally-defined version of the
+#'   function.
 #'
 #' @examples
-#' # to do
+#' # list the default arguments for a function
+#' defaults(data.frame)
+#'
+#' # change one or more of them
+#' defaults(data.frame) <- list(fix.empty.names = FALSE)
+#' data.frame(1:3)
+#'
+#' # reset the defaults
+#' data.frame <- reset_defaults(data.frame)
+#' data.frame(1:3)
 defaults <- function (fun) {
   args <- formals(fun)
   render_defaults(args, fun)
