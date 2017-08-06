@@ -98,8 +98,14 @@ print.defaults_function <- function (x, ...) {
 render_defaults <- function (args, fun) {
 
   if (length(args) == 0) {
-    cat (  "function has no arguments")
+
+    if (is.primitive(fun))
+      cat("cannot modify defaults on primitive functions")
+    else
+      cat("function has no arguments")
+
     return ()
+
   }
 
   each_default_text <- lapply(seq_along(args), render_one_default, args)
