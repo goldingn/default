@@ -1,9 +1,9 @@
 context('printing defaults')
 
-test_that('defaults handles primitives', {
+test_that('defaults errors on primitives', {
 
-  text <- capture.output(defaults(max))
-  expect_equal(text, "cannot modify defaults on primitive functions")
+  expect_error(defaults(max),
+               "fun is a primitive function")
 
 })
 

@@ -39,6 +39,7 @@
 #' data.frame <- reset_defaults(data.frame)
 #' data.frame(1:3)
 defaults <- function (fun) {
+  check_function(fun)
   args <- formals(fun)
   render_defaults(args, fun)
   invisible(args)
@@ -48,7 +49,8 @@ defaults <- function (fun) {
 #' @export
 `defaults<-` <- function (fun, value) {
 
-  check_defaults(fun, value)
+  check_function(fun)
+  check_defaults(value, fun)
 
   arguments <- update_defaults(formals(fun), value)
 
@@ -145,7 +147,7 @@ render_one_default <- function (index, args) {
 
 }
 
-check_defaults <- function (fun, value) {
+check_function <- function (fun) {
 
   if (!is.function(fun))
     stop ("fun is not a function",
@@ -154,6 +156,10 @@ check_defaults <- function (fun, value) {
   if (is.primitive(fun))
     stop ("fun is a primitive function; its default arguments cannot be altered",
           call. = FALSE)
+
+}
+
+check_defaults <- function (value, fun) {
 
   if (!is.list(value))
     stop ("value is not a list",
