@@ -1,4 +1,4 @@
-[![build status](https://travis-ci.org/goldingn/defaults.svg?branch=master)](https://travis-ci.org/goldingn/defaults) [![codecov.io](https://codecov.io/github/goldingn/defaults/coverage.svg?branch=master)](https://codecov.io/github/goldingn/defaults?branch=master) [![cran version](http://www.r-pkg.org/badges/version/defaults)](https://cran.rstudio.com/web/packages/defaults)
+[![build status](https://travis-ci.org/goldingn/default.svg?branch=master)](https://travis-ci.org/goldingn/default) [![codecov.io](https://codecov.io/github/goldingn/default/coverage.svg?branch=master)](https://codecov.io/github/goldingn/default?branch=master) [![cran version](http://www.r-pkg.org/badges/version/default)](https://cran.rstudio.com/web/packages/default)
 
 default
 =======
