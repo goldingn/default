@@ -1,8 +1,8 @@
 Package: default
 Type: Package
 Title: Change the Default Arguments in R Functions
-Date: 2017-08-06
-Version: 0.1.0
+Date: 2017-08-07
+Version: 1.0.0
 Author: Nick Golding
 Maintainer: Nick Golding <nick.golding.research@gmail.com>
 Description: A simple syntax to change the default values for function
