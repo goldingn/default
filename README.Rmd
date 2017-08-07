@@ -7,9 +7,10 @@ output:
 [![build status](https://travis-ci.org/goldingn/default.svg?branch=master)](https://travis-ci.org/goldingn/default)
 [![codecov.io](https://codecov.io/github/goldingn/default/coverage.svg?branch=master)](https://codecov.io/github/goldingn/default?branch=master)
 [![cran version](http://www.r-pkg.org/badges/version/default)](https://cran.rstudio.com/web/packages/default)
+[![cran downloads](http://cranlogs.r-pkg.org/badges/default)](http://cran.rstudio.com/web/packages/default/index.html)
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, cache = FALSE, fig.height=4, fig.width=5)
+knitr::opts_chunk$set(echo = TRUE, cache = FALSE, fig.height=3, fig.width=4)
 set.seed(1)
 ```
 
@@ -17,6 +18,18 @@ set.seed(1)
 ### change the default arguments in R functions.
 
 Tired of always typing out the same old arguments to functions?  Use `default()` to set your favourite arguments as the defaults.
+
+### Example:
+
+
+```{r load, eval = FALSE}
+install.packages("default")
+library(default)
+```
+```{r load_secret, echo = FALSE}
+library (default)
+```
+
 
 ##### boring old defaults
 
@@ -27,9 +40,10 @@ hist(iris$Sepal.Width)
 ##### exciting new defaults
 
 ```{r exciting}
-library (default)
 default(hist.default) <- list(col = "deeppink", border = "white", ylab = "", main = "")
+```
 
+```{r exciting_plot}
 hist(iris$Sepal.Width)
 ```
 
@@ -44,10 +58,4 @@ hist(iris$Sepal.Width, col = "limegreen")
 ```{r restore}
 hist.default <- reset_default(hist.default)
 hist(iris$Sepal.Width)
-```
-
-##### you can install default from github
-
-```{r install, eval = FALSE}
-devtools::install_github("goldingn/default")
 ```
