@@ -1,4 +1,4 @@
 library(testthat)
-library(defaults)
+library(default)
 
-test_check("defaults")
+test_check("default")

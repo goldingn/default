@@ -1,9 +1,9 @@
 #' change a function's default arguments
-#' @name defaults
+#' @name default
 #' @export
 #'
-#' @description \code{defaults()} lets you check, and change, a function's
-#'   default arguments. \code{reset_defaults()} returns the arguments to their
+#' @description \code{default()} lets you check, and change, a function's
+#'   default arguments. \code{reset_default()} returns the arguments to their
 #'   original defaults.
 #'
 #' @param fun a function
@@ -14,7 +14,7 @@
 #'   If \code{fun} is defined locally, it will be overwritten by the version
 #'   with the new defaults.
 #'
-#'   \code{reset_defaults} \emph{returns} the reset function, rather than
+#'   \code{reset_default} \emph{returns} the reset function, rather than
 #'   modifying it in place, so you'll need to reassign it, as in the example.
 #'
 #' @return \code{default()} (without assignment) invisibly returns a pairlist of
@@ -22,32 +22,32 @@
 #'   arguments, highlighting those that the user has changed from their original
 #'   defaults.
 #'
-#'   \code{reset_defaults()} returns the \code{fun}, but with the defaults reset
+#'   \code{reset_default()} returns the \code{fun}, but with the defaults reset
 #'   to their original values. If \code{fun} was a function from a package, the
 #'   same thing can be achieved by replacing the locally-defined version of the
 #'   function.
 #'
 #' @examples
 #' # list the default arguments for a function
-#' defaults(data.frame)
+#' default(data.frame)
 #'
 #' # change one or more of them
-#' defaults(data.frame) <- list(fix.empty.names = FALSE)
+#' default(data.frame) <- list(fix.empty.names = FALSE)
 #' data.frame(1:3)
 #'
 #' # reset the defaults
-#' data.frame <- reset_defaults(data.frame)
+#' data.frame <- reset_default(data.frame)
 #' data.frame(1:3)
-defaults <- function (fun) {
+default <- function (fun) {
   check_function(fun)
   args <- formals(fun)
   render_defaults(args, fun)
   invisible(args)
 }
 
-#' @rdname defaults
+#' @rdname default
 #' @export
-`defaults<-` <- function (fun, value) {
+`default<-` <- function (fun, value) {
 
   check_function(fun)
   check_defaults(value, fun)
@@ -59,7 +59,7 @@ defaults <- function (fun) {
                           body(fun)),
                      envir = environment(fun))
 
-  original(new_fun) <- reset_defaults(fun)
+  original(new_fun) <- reset_default(fun)
 
   class(new_fun) <- c("defaults_function", class(new_fun))
 
@@ -67,9 +67,9 @@ defaults <- function (fun) {
 
 }
 
-#' @rdname defaults
+#' @rdname default
 #' @export
-reset_defaults <- function (fun) {
+reset_default <- function (fun) {
 
   original_fun <- original(fun)
 
@@ -162,7 +162,7 @@ check_defaults <- function (value, fun) {
           call. = FALSE)
 
   if (any(names(value) == ""))
-    stop ("not all of the new defaults are named",
+    stop ("not all of the new default arguments are named",
           call. = FALSE)
 
   old_args <- names(formals(fun))

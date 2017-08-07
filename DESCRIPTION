@@ -1,4 +1,4 @@
-Package: defaults
+Package: default
 Type: Package
 Title: Change the Default Arguments in R Functions
 Date: 2017-08-06

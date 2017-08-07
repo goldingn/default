@@ -1,16 +1,16 @@
 context('changing defaults')
 
-test_that('defaults<- modifies a local function', {
+test_that('default<- modifies a local function', {
 
   foo <- function (a = 1) a
-  defaults(foo) <- list(a = 2)
+  default(foo) <- list(a = 2)
   expect_equal(foo(), 2)
 
 })
 
-test_that('defaults<- modifies a package function', {
+test_that('default<- modifies a package function', {
 
-  defaults(mean.default) <- list(na.rm = TRUE)
+  default(mean.default) <- list(na.rm = TRUE)
   expect_equal(mean(c(1, NA, 2)), 1.5)
 
 })
@@ -18,16 +18,16 @@ test_that('defaults<- modifies a package function', {
 test_that('local functions are reset', {
 
   foo <- function (a = 1) a
-  defaults(foo) <- list(a = 2)
-  foo <- reset_defaults(foo)
+  default(foo) <- list(a = 2)
+  foo <- reset_default(foo)
   expect_equal(foo(), 1)
 
 })
 
 test_that('package functions are reset', {
 
-  defaults(mean.default) <- list(na.rm = TRUE)
-  mean.default <- reset_defaults(mean.default)
+  default(mean.default) <- list(na.rm = TRUE)
+  mean.default <- reset_default(mean.default)
   expect_equal(mean(c(1, NA, 2)),
                as.numeric(NA))
 
