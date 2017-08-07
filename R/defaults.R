@@ -101,11 +101,7 @@ render_defaults <- function (args, fun) {
 
   if (length(args) == 0) {
 
-    if (is.primitive(fun))
-      cat("cannot modify defaults on primitive functions")
-    else
-      cat("function has no arguments")
-
+    cat("function has no arguments")
     return ()
 
   }
@@ -165,8 +161,8 @@ check_defaults <- function (value, fun) {
     stop ("value is not a list",
           call. = FALSE)
 
-  if (length(names(value)) != length(value))
-    stop ("value is a list, but the arguments are not all named",
+  if (any(names(value) == ""))
+    stop ("not all of the new defaults are named",
           call. = FALSE)
 
   old_args <- names(formals(fun))
@@ -175,14 +171,14 @@ check_defaults <- function (value, fun) {
 
   if (length(bad_args) > 0) {
 
+    bad_args <- paste0("'", bad_args, "'")
+
     if (length(bad_args) == 1) {
-      msg <- paste("value contains the element:",
-                   bad_args,
-                   "which is not an argument of fun")
+      msg <- paste(bad_args,
+                   "is not an argument of this function")
     } else {
-      msg <- paste("value contains the elements:",
-                   paste(bad_args, collapse = ","),
-                   "which are not arguments of fun")
+      msg <- paste(paste(bad_args, collapse = ", "),
+                   "are not arguments of this function")
     }
 
     stop (msg, call. = FALSE)

@@ -1,20 +1,13 @@
 context('printing defaults')
 
-test_that('defaults errors on primitives', {
-
-  expect_error(defaults(max),
-               "fun is a primitive function")
-
-})
-
-test_that('defaults handles functions with no arguments', {
+test_that('defaults prints functions with no arguments', {
 
   text <- capture.output(defaults(Sys.Date))
   expect_equal(text, "function has no arguments")
 
 })
 
-test_that('defaults handles arguments without defaults', {
+test_that('defaults prints arguments without defaults', {
 
   text <- capture.output(defaults(print))
   expect_equal(text, c("  - x = [none]",
@@ -22,7 +15,7 @@ test_that('defaults handles arguments without defaults', {
 
 })
 
-test_that('defaults handles arguments with defaults', {
+test_that('defaults prints arguments with defaults', {
 
   text <- capture.output(defaults(citation))
   expect_equal(text, c("  - package = \"base\"",
@@ -41,10 +34,17 @@ test_that('defaults handles with calls as defaults', {
 test_that('defaults flags user-defined defaults', {
 
   defaults(citation) <- list(package = "defaults")
-  on.exit({rm(citation)})
   text <- capture.output(defaults(citation))
   expect_equal(text, c("* - package = \"defaults\"",
                        "  - lib.loc = NULL",
                        "  - auto = NULL "))
+
+})
+
+test_that('default_functions are printed without displaying the original', {
+
+  defaults(hist.default) <- list(col = "red")
+  text_new <- capture.output(print(hist.default))
+  expect_true(!"attr(,\"original_function\")" %in% text_new)
 
 })
